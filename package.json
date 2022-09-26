@@ -2,5 +2,14 @@
   "name": "prettier-plugin-move",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "antlr4ts":"antlr4ts -visitor Move.g4 -o src/antlr"
+  },
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4"
+  },
+  "devDependencies": {
+    "antlr4ts-cli": "^0.5.0-alpha.4"
+  }
 }
