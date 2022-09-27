@@ -1,4 +1,4 @@
-// copyright 2022amovane <amovane@163.com> licensed under the mIT license. see lICENSE file in the
+// Copyright 2022 Amovane <amovane@163.com> licensed under the MIT license. see lICENSE file in the
 // project root for details.
 
 grammar Move;
@@ -8,49 +8,49 @@ grammar Move;
 //**************************************************************************************************
 
 file:
-	(addressBlock | module | script)*
-	;
+  (addressBlock | module | script)*
+  ;
 
 //**************************************************************************************************
 // modules
 //**************************************************************************************************
 
 module:
- 	docComments ( 'spec' | 'module')  (leadingNameAccess '::')? moduleName '{'
-			attributes
-					(useDecl | friendDecl | // specBlock 
-					| (docComments moduleMemberModifiers
-						 (constantDecl | structDecl | functionDecl))?
-					)
+  docComments ( 'spec' | 'module')  (leadingNameAccess '::')? moduleName '{'
+    attributes
+      (useDecl | friendDecl | // specBlock 
+        | (docComments moduleMemberModifiers
+          (constantDecl | structDecl | functionDecl))?
+      )
 	'}'
-	;
+  ;
 
 useDecl:
-	'use' moduleIdent useAlias ';'
-	| 'use' moduleIdent '::' useMember ';'
-	| 'use' moduleIdent '::' '{' useMember (',' useMember )* '}'
-	;
+  'use' moduleIdent useAlias ';'
+  | 'use' moduleIdent '::' useMember ';'
+  | 'use' moduleIdent '::' '{' useMember (',' useMember )* '}'
+  ;
 
 useMember:
   Identifier useAlias
-	;
+  ;
 
 useAlias:
   ('as' Identifier)?
-	;
+  ;
 
 //**************************************************************************************************
 // scripts
 //**************************************************************************************************
 
 script:
-	'script' '{'
-		(attributes useDecl)*
-		(attributes constantDecl)*
-		attributes docComments moduleMemberModifiers functionDecl
-			// TODO (attributes specBlock)*
-	'}'
-	;
+  'script' '{'
+    (attributes useDecl)*
+    (attributes constantDecl)*
+    attributes docComments moduleMemberModifiers functionDecl
+    // TODO (attributes specBlock)*
+  '}'
+  ;
 
 //**************************************************************************************************
 // friend
@@ -58,7 +58,7 @@ script:
 
 friendDecl: 
   'friend' nameAccessChain ';'
-	;
+  ;
 
 //**************************************************************************************************
 // modifiers
@@ -66,34 +66,34 @@ friendDecl:
 
 moduleMemberModifiers:
   moduleMemberModifier*
-	;
+  ;
 
 moduleMemberModifier:
- 	visibility | 'native'
-	;
+  visibility | 'native'
+  ;
 
 visibility:
-	'public' ( '(' 'script' | 'friend' ')' )?
-	;
+  'public' ( '(' 'script' | 'friend' ')' )?
+  ;
 
 attributeValue:
- 	value
-	| nameAccessChain
-	;
+  value
+  | nameAccessChain
+  ;
 
 attribute:
- 	Identifier
-	| Identifier '='attributeValue
-	| Identifier '(' commaAttribute ')'
-	;
+  Identifier
+  | Identifier '='attributeValue
+  | Identifier '(' commaAttribute ')'
+  ;
 
 commaAttribute:
-	attribute (','attribute)*
-	;
+  attribute (','attribute)*
+  ;
 
 attributes:
-	('#' '[' commaAttribute ']')*
-	;
+  ('#' '[' commaAttribute ']')*
+  ;
 
 //**************************************************************************************************
 // types
@@ -101,54 +101,54 @@ attributes:
 
 type:
   nameAccessChain ('<' types '>')?
-	| '&' type
-	| '&mut' type
-	| '|' types '|' type // spec only
-	| '(' types ')'
-	;
+  | '&' type
+  | '&mut' type
+  | '|' types '|' type // spec only
+  | '(' types ')'
+  ;
 
 types:
- 	type (',' type)*
-	;
+  type (',' type)*
+  ;
 
 ability: 
-	'copy' 
-	| 'drop' 
-	| 'store' 
-	| 'key'
-	;
+  'copy' 
+  | 'drop' 
+  | 'store' 
+  | 'key'
+  ;
 
 optionalTypeArgs:
-	'<' types '>'
-	;
+  '<' types '>'
+  ;
 
 typeParameter:
- 	Identifier constraint?
-	;
+  Identifier constraint?
+  ;
 
 typeParameters:
- 	typeParameter (',' typeParameter)*
-	;
+  typeParameter (',' typeParameter)*
+  ;
 
 constraint:
-	':'ability ('+'ability)*
-	;
+  ':' ability ('+'ability)*
+  ;
 
 typeParameterWithPhantomDecl:
-	'phantom'? typeParameter
-	;
+  'phantom'? typeParameter
+  ;
 
 typeParameterWithPhantomDecls:
- 	typeParameterWithPhantomDecl (',' typeParameterWithPhantomDecl)*
-	;
+  typeParameterWithPhantomDecl (',' typeParameterWithPhantomDecl)*
+  ;
 
 optionalTypeParameters:
-	('<' typeParameters '>')?
-	;
+  ('<' typeParameters '>')?
+  ;
 
 structTypeParameter:
-	('<' typeParameterWithPhantomDecls '>')?
-	;
+  ('<' typeParameterWithPhantomDecls '>')?
+  ;
 
 
 //**************************************************************************************************
@@ -156,20 +156,20 @@ structTypeParameter:
 //**************************************************************************************************
 
 functionDecl:
-	'fun' functionDefName parameters (':' type)? ('acquires' nameAccessChain (',' nameAccessChain)*)? ('{' sequence '}' | ';')
-	;
+  'fun' functionDefName parameters (':' type)? ('acquires' nameAccessChain (',' nameAccessChain)*)? ('{' sequence '}' | ';')
+  ;
 
 functionDefName:
   Identifier
-	;
+  ;
 
 parameters:
- 	parameter (',' parameter)*
-	;
+  parameter (',' parameter)*
+  ;
 
 parameter:
- 	var ':' type
-	;
+  var ':' type
+  ;
 
 
 //**************************************************************************************************
@@ -178,95 +178,95 @@ parameter:
 
 sequence:
   useDecl*  (sequenceItem ';')* exp? '}'
- 	;
+  ;
 
 sequenceItem:
   exp
   | 'let'bindList (':' type)? ('=' exp)?
-	;
+  ;
 
 //**************************************************************************************************
 // Expressions
 //**************************************************************************************************
 term :
-	'break'
-	| 'continue'
-	| 'vector' ('<' types '>')? '[' exps ']'
-	| value
-	| '(' exps ')'
-	| '(' exp ':' type ')'
-	| '(' exp 'as' type ')'
-	| '{' sequence
-	| 'if' '(' exp ')' exp 'else' '{' exp '}'
-	| 'if' '(' exp ')' '{' exp '}'
-	| 'if' '(' exp ')' exp ('else' exp)?
-	| 'while' '(' exp ')' '{' exp '}'
+  'break'
+  | 'continue'
+  | 'vector' ('<' types '>')? '[' exps ']'
+  | value
+  | '(' exps ')'
+  | '(' exp ':' type ')'
+  | '(' exp 'as' type ')'
+  | '{' sequence
+  | 'if' '(' exp ')' exp 'else' '{' exp '}'
+  | 'if' '(' exp ')' '{' exp '}'
+  | 'if' '(' exp ')' exp ('else' exp)?
+  | 'while' '(' exp ')' '{' exp '}'
 //  | 'while' '(' <Exp> ')' <Exp>  specBlock)?  tODO
-	| 'loop' exp
-	| 'loop' '{' exp '}'
-	| 'return' '{' exp '}'
-	| 'return' exp?
-	| 'abort' '{' exp '}'
-	| 'abort' exp
-	;
+  | 'loop' exp
+  | 'loop' '{' exp '}'
+  | 'return' '{' exp '}'
+  | 'return' exp?
+  | 'abort' '{' exp '}'
+  | 'abort' exp
+  ;
 
 exp:
-	lambdaBindList exp   // spec only
-	| quantifier           // spec only
-	| binOpExp
-	| unaryExp '=' exp
-	;
+  lambdaBindList exp   // spec only
+  | quantifier           // spec only
+  | binOpExp
+  | unaryExp '=' exp
+  ;
 
 binOp : 
-	'==>'                                       // spec only
-	| '||'
-	| '&&'
-	| '==' | '!=' | '<' | '>' | '<=' | '>='
-	| '..'                                      // spec only
-	| '|'
-	| '^'
-	| '&'
-	| '<<' | '>>'
-	| '+' | '-'
-	| '*' | '/' | '%'
-	;
+  '==>'                                       // spec only
+  | '||'
+  | '&&'
+  | '==' | '!=' | '<' | '>' | '<=' | '>='
+  | '..'                                      // spec only
+  | '|'
+  | '^'
+  | '&'
+  | '<<' | '>>'
+  | '+' | '-'
+  | '*' | '/' | '%'
+  ;
 
 binOpExp:
- 	unaryExp (binOp unaryExp)*	
-	;
+  unaryExp (binOp unaryExp)*	
+  ;
 
 unaryExp:
-	'!' unaryExp
-	| '&mut' unaryExp
-	| '&' unaryExp
-	| '*' unaryExp
-	| 'move' var
-	| 'copy' var
-	| dotOrIndexChain
-	;
+  '!' unaryExp
+  | '&mut' unaryExp
+  | '&' unaryExp
+  | '*' unaryExp
+  | 'move' var
+  | 'copy' var
+  | dotOrIndexChain
+  ;
 
 dotOrIndexChain:
- 	term ('.' Identifier)*
-	| term ('[' exp ']')*                      // spec only
-	;
+  term ('.' Identifier)*
+  | term ('[' exp ']')*                      // spec only
+  ;
 
 quantifier:
-	( 'forall' | 'exists' ) quantifierBindings ('{' (exp)* '}')* ('where' exp)? ':' exp
-	| ( 'choose' '[' 'min' ']' ) quantifierBind 'where' exp
-	;
+  ( 'forall' | 'exists' ) quantifierBindings ('{' (exp)* '}')* ('where' exp)? ':' exp
+  | ( 'choose' '[' 'min' ']' ) quantifierBind 'where' exp
+  ;
 
 quantifierBindings:
- 	quantifierBind (',' quantifierBind)*
-	;
+  quantifierBind (',' quantifierBind)*
+  ;
 
 quantifierBind:
- 	Identifier ':' type 
-	| Identifier 'in' exp
-	;
+  Identifier ':' type 
+  | Identifier 'in' exp
+  ;
 
 exps:
- 	exp (',' exp)*
-	;
+  exp (',' exp)*
+  ;
 
 
 //**************************************************************************************************
@@ -274,34 +274,34 @@ exps:
 //**************************************************************************************************
 
 expField: 
- 	field ('<' ':' exp '>')?
-	;
+  field ('<' ':' exp '>')?
+  ;
 
 bindField:
- 	field ('<' ':'bind '>')?
-	;
+  field ('<' ':'bind '>')?
+  ;
 
 bindFields:
-	bindField (','bindField)*
-	;
+  bindField (','bindField)*
+  ;
 
 bind:
- 	var
-	| nameAccessChain optionalTypeArgs '{'bindFields '}'
-	;
+  var
+  | nameAccessChain optionalTypeArgs '{'bindFields '}'
+  ;
 
 binds:
-bind (','bind)*
-	;
+  bind (','bind)*
+  ;
 
 bindList:
-bind
-	| '('binds ')'
-	;
+  bind
+  | '('binds ')'
+  ;
 
 lambdaBindList:
-	'|'binds '|'
-	;
+  '|'binds '|'
+  ;
 
 
 //**************************************************************************************************
@@ -309,33 +309,33 @@ lambdaBindList:
 //**************************************************************************************************
 
 Alphanumeric:
-	[0-9a-zA-Z]
-	;
+  [0-9a-zA-Z]
+  ;
 
 Digit:
-	[0-9]
-	;
+  [0-9]
+  ;
 
 number:
- Digit+
-	;
+  Digit+
+  ;
 
 numberTyped:
- number ('u8' | 'u64' | 'u128')
-	;
+  number ('u8' | 'u64' | 'u128')
+  ;
 
 byteString:
-	('b"' | 'x"') Alphanumeric* '"'
-	; 
+  ('b"' | 'x"') Alphanumeric* '"'
+  ; 
 
 value:
-	'@' leadingNameAccess
-	| 'true'
-	| 'false'
-	| number
-	| numberTyped
-	| byteString
-	;
+  '@' leadingNameAccess
+  | 'true'
+  | 'false'
+  | number
+  | numberTyped
+  | byteString
+  ;
 
 //**************************************************************************************************
 // Constants
@@ -343,7 +343,7 @@ value:
 
 constantDecl:
   'const' Identifier ':' type '=' exp ';'
-	;
+  ;
 
 
 //**************************************************************************************************
@@ -351,28 +351,28 @@ constantDecl:
 //**************************************************************************************************
 
 structDecl:
-	'struct' structDefName ('has'ability (','ability)+)?
-	('{' fieldAnnot '}' | ';')
-	;
+  'struct' structDefName ('has'ability (','ability)+)?
+  ('{' fieldAnnot '}' | ';')
+  ;
 
 structDefName: 
- 	Identifier optionalTypeParameters
-	;
+  Identifier optionalTypeParameters
+  ;
 
 fieldAnnots:
- 	fieldAnnot (',' fieldAnnot)*
-	;
+  fieldAnnot (',' fieldAnnot)*
+  ;
 
 
 fieldAnnot:
-	docComments field ':' type
-	;
+  docComments field ':' type
+  ;
 
 docComments:
-	'/"' .*? '"/'
-	| '//' .*?
-	| '///' .*?
-	;
+  '/"' .*? '"/'
+  | '//' .*?
+  | '///' .*?
+  ;
 
 //**************************************************************************************************
 // Identifiers, Addresses, and Names
@@ -380,41 +380,41 @@ docComments:
 
 Identifier:
   [a-zA-Z_]+
-	;
+  ;
 
 NumericalAddress: 
   '0x' ([0-9a-zA-Z])*
-	;
+  ;
 
 leadingNameAccess: 
   NumericalAddress 
-	| Identifier
-	;
+  | Identifier
+  ;
 
 var:
- 	Identifier
-	;
+  Identifier
+  ;
 
 field:
- 	Identifier
-	;
+  Identifier
+  ;
 
 moduleIdent:
   leadingNameAccess '::' moduleName
-	;
+  ;
 
 moduleName:
   Identifier
-	;
+  ;
 
- nameAccessChain:
+nameAccessChain:
   leadingNameAccess ('::' Identifier('::' Identifier)? )?
-	;
+  ;
 
 //**************************************************************************************************
 // AddressBlock
 //**************************************************************************************************
 
 addressBlock:
-	'address' leadingNameAccess '{' (attributes module)* '}'
-	;
+  'address' leadingNameAccess '{' (attributes module)* '}'
+  ;
