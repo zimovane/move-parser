@@ -156,7 +156,7 @@ structTypeParameter:
 //**************************************************************************************************
 
 functionDecl:
-  'fun' functionDefName parameters (':' type)? ('acquires' nameAccessChain (',' nameAccessChain)*)? ('{' sequence '}' | ';')
+  'fun' functionDefName '(' parameters ')' (':' type)? ('acquires' nameAccessChain (',' nameAccessChain)*)? ('{' sequence '}' | ';')
   ;
 
 functionDefName:
@@ -177,12 +177,16 @@ parameter:
 //**************************************************************************************************
 
 sequence:
-  useDecl*  (sequenceItem ';')* exp? '}'
+  useDecl*  (sequenceItem ';')* exp?
   ;
 
 sequenceItem:
   exp
-  | 'let'bindList (':' type)? ('=' exp)?
+  | letBinding
+  ;
+
+letBinding:
+  'let' bindList (':' type)? ('=' exp)?
   ;
 
 //**************************************************************************************************
@@ -287,7 +291,7 @@ bindFields:
 
 bind:
   var
-  | nameAccessChain optionalTypeArgs '{'bindFields '}'
+  | nameAccessChain optionalTypeArgs? '{' bindFields '}'
   ;
 
 binds:
@@ -351,8 +355,8 @@ constantDecl:
 //**************************************************************************************************
 
 structDecl:
-  'struct' structDefName ('has'ability (','ability)+)?
-  ('{' fieldAnnot '}' | ';')
+  'struct' structDefName ('has'ability (','ability)*)?
+  ('{' fieldAnnots '}' | ';')
   ;
 
 structDefName: 
