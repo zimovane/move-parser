@@ -4,9 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "antlr4ts":"antlr4ts -visitor Move.g4 -o src/antlr"
+    "antlr4ts": "antlr4ts -visitor Move.g4 -o src/antlr"
   },
   "dependencies": {
+    "@types/antlr4": "^4.7.3",
+    "antlr4": "^4.11.0",
     "antlr4ts": "^0.5.0-alpha.4"
   },
   "devDependencies": {
