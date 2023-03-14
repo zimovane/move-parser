@@ -1,12 +1,9 @@
-import { ParserRuleContext } from "antlr4ts";
 import { AbstractParseTreeVisitor } from "antlr4ts/tree/AbstractParseTreeVisitor";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
 import * as SP from "./antlr/MoveParser";
 
 import { MoveVisitor } from "./antlr/MoveVisitor";
 import { ParseOptions } from "./types";
 import * as AST from "./ast-types";
-import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 
 interface SourceLocation {
   start: {
